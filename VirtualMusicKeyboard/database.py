@@ -1,5 +1,5 @@
 white_note_names = {0: 'C', 1: 'D', 2: 'E', 3: 'F', 4: 'G', 5: 'A', 6: 'B'}
-black_note_names = {0: 'C#', 1: 'D#', 3: 'F#', 4: 'G#', 5: 'A#'}
+black_note_names = {0: 'C#', 1: 'D#', 2: 'F#', 3: 'G#', 4: 'A#'}
 octave_nos = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 program_values = {0: 'Acoustic Grand Piano',
@@ -203,11 +203,11 @@ keyboard_mappings = {'Tab': 16, 'q': 17, 'Q': 17, 'w': 18, 'W': 18,
                      'comma': 33, 'less': 33, 'm': 34, 'M': 34,
                      'n': 35, 'N': 35, 'b': 36, 'B': 36, 'v': 37, 'V': 37,
                      'c': 38, 'C': 38, 'x': 39, 'X': 39, 'z': 40, 'Z': 40,
-                     'Shift_L': 41, '1': 44, 'exclam': 44, '2': 45, 'at': 45,
-                     '4': 47, 'dollar': 47, '5': 48, 'percent': 48, '6': 49,
-                     'asciicircum': 49, '8': 51, 'asterisk': 51, '9': 52,
-                     'parenleft': 52, 'minus': 54, 'underscore': 54,
-                     'equal': 55, 'plus': 55, 'BackSpace': 56, 'quoteright': 58,
-                     'quotedbl': 58, 'semicolon': 59, 'colon': 59, 'k': 61,
-                     'K': 61, 'j': 62, 'J': 62, 'h': 63, 'H': 63, 'f': 65,
-                     'F': 65, 'd': 66, 'D': 66, 'a': 68, 'A': 68}
+                     'Shift_L': 41, '1': 63, 'exclam': 63, '2': 64, 'at': 64,
+                     '4': 65, 'dollar': 65, '5': 66, 'percent': 66, '6': 67,
+                     'asciicircum': 67, '8': 68, 'asterisk': 68, '9': 69,
+                     'parenleft': 69, 'minus': 70, 'underscore': 70,
+                     'equal': 71, 'plus': 71, 'BackSpace': 72, 'quoteright': 73,
+                     'quotedbl': 73, 'semicolon': 74, 'colon': 74, 'k': 75,
+                     'K': 75, 'j': 76, 'J': 76, 'h': 77, 'H': 77, 'f': 78,
+                     'F': 78, 'd': 79, 'D': 79, 'a': 80, 'A': 80}

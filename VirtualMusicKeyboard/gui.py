@@ -6,60 +6,65 @@ UI for the keyboard.
 """
 
 import tkinter as tk
-from tkinter import ttk
-import musicpy, database as db
+from tkinter import ttk, messagebox
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+
+from musicpy import MusicKeyboard
+import database as db
 from metronome import Metronome
 
-class Keyboard(tk.Frame):
+class App:
      """Set up the UI for the keyboard."""
-    
-     def __init__(self, mainwindow, white_keys=None, black_keys=None):
-          tk.Frame.__init__(self, mainwindow, white_keys=None, black_keys=None)
-          self.mainwindow = mainwindow
 
-          self.keyboard_frame = tk.Frame(self.mainwindow)
+     buttons = []
+    
+     def __init__(self, root, scales=7):
+          self.root = root
+          self.white_keys = 2 + 7*scales + 1
+          self.black_keys = [1, 0] + [1, 1, 0, 1, 1, 1, 0]*scales
+          self.root.title("Virtual Piano Keyboard")
+          self.root.geometry('%dx300'%(40+140*scales+20))
+          icon = tk.PhotoImage(file="./piano.png")
+          self.root.iconphoto(True, icon)
+
+          SF2 = "./GeneralUser GS 1.471/GeneralUser GS v1.471.sf2"
+          self.musickeyboard = MusicKeyboard(SF2)
+          self.musickeyboard.set_instrument(0, 0)
+          
+          self.initui()
+
+     def initui(self):
+          self.keyboard_frame = tk.Frame(self.root)
           self.keyboard_frame.pack(side='bottom', fill='both', expand=True)
 
-          self.settings_frame = tk.Frame(self.mainwindow)
+          self.settings_frame = tk.Frame(self.root)
           self.settings_frame.pack(side='top', fill='both', expand=True)
 
-          self.buttons_white = []
-          self.buttons_black = []
-
-          self.create_keys(white_keys, black_keys)
-
+          self.create_keys()
           self.tuning_options()
 
-          self.mainwindow.bind('<Key>',
-               lambda event: self.keyboard_playnote(event,
-                    self.program_name.get(), int(self.sustain.get()),
-                    int(self.channel_no.get()), int(self.velocity.get())))
+          self.root.bind('<Key>', self.keyboard_playnote)
+          for button in self.buttons:
+               self.root.bind('<Button-1>', self.mouse_playnote)
     
-     def create_keys(self, white_keys, black_keys):
+     def create_keys(self):
           """Creates the white and black keys of the keyboard."""
-          for i in range(white_keys):
-               self.W = tk.Button(self.keyboard_frame, bg='white')
-               self.W["command"] = lambda i=i: musicpy.play_white_note(i,
-                    self.program_name.get(), int(self.sustain.get()),
-                    int(self.channel_no.get()), int(self.velocity.get()))
+          for i in range(self.white_keys):
+               self.W = tk.Button(self.keyboard_frame, bg='white',
+                    command=lambda i=i: print(i))
                self.W.grid(row=0, column=i*3, rowspan=2, columnspan=3,
                     sticky='nsew')
-               self.buttons_white.append(self.W)
+               self.buttons.append(self.W)
 
-          for i in range(white_keys - 1):
-               if black_keys[i] == 1:
+          for i in range(self.white_keys-1):
+               if self.black_keys[i] == 1:
                     self.B = tk.Button(self.keyboard_frame, bg='black',
-                        activebackground='grey')
-                    self.B["command"] = lambda i=i: musicpy.play_black_note(i,
-                        self.program_name.get(), int(self.sustain.get()),
-                        int(self.channel_no.get()), int(self.velocity.get()))
+                         activebackground='grey', command=lambda i=i: print(i))
                     self.B.grid(row=0, column=(i*3)+2, rowspan=1, columnspan=2,
                          sticky='nsew')
-                    self.buttons_black.append(self.B)
-               if black_keys[i] == 0:
-                    self.buttons_black.insert(i, 0)
+                    self.buttons.append(self.B)
 
-          for i in range(white_keys * 3):
+          for i in range(self.white_keys*3):
                self.keyboard_frame.columnconfigure(i, weight=1)
 
           for i in range(2):
@@ -70,36 +75,36 @@ class Keyboard(tk.Frame):
           font_used = ("Arial", 10)
 
           self.label_channel = ttk.Label(self.settings_frame, text='Channel:',
-               font=font_used).grid(column=0, row=5)
+               font=font_used).grid(column=0, row=0, padx=5, pady=5)
           self.channel_no = tk.IntVar()
           self.channel = ttk.Combobox(self.settings_frame, width=3,
                state='readonly', textvariable=self.channel_no)
           self.channel['values'] = ([i for i in range(16)])
-          self.channel.grid(column=1, row=5)
+          self.channel.grid(column=1, row=0, padx=5, pady=5)
           self.channel.current(0)
         
           self.label_velocity = ttk.Label(self.settings_frame, text='Velocity:',
-               font=font_used).grid(column=2, row=5)
+               font=font_used).grid(column=2, row=0, padx=5, pady=5)
+          self.__velocity = tk.IntVar()
           self.velocity = ttk.Spinbox(self.settings_frame, width=5, from_=0,
-               to=127, state='readonly')
-          self.velocity.grid(column=3, row=5, sticky='w')
+               to=127, textvariable=self.__velocity, state='readonly')
+          self.velocity.grid(column=3, row=0, sticky='w', padx=5, pady=5)
           self.velocity.set(127)
-
-          self.separator1 = ttk.Separator(self.settings_frame)
-          self.separator1.grid(column=0, row=10)
         
           self.label_sustain = ttk.Label(self.settings_frame, text='Sustain:',
-               font=font_used).grid(column=0, row=15)
+               font=font_used).grid(column=0, row=10, padx=5, pady=5)
+          self.__sustain = tk.IntVar()
           self.sustain = ttk.Spinbox(self.settings_frame, width=3, from_=0,
-               to=127, state='readonly')
-          self.sustain.grid(column=1, row=15)
+               to=127, textvariable=self.__sustain, state='readonly',
+               command=self.sustain_change)
           if int(self.channel_no.get()) == 9:
                self.sustain.set(0)
           else:
                self.sustain.set(0)
+          self.sustain.grid(column=1, row=10, padx=5, pady=5)
         
           self.label_program = ttk.Label(self.settings_frame, text='Program:',
-               font=font_used).grid(column=2, row=15)
+               font=font_used).grid(column=2, row=10, padx=5, pady=5)
           self.program_name = tk.StringVar()
           self.program = ttk.Combobox(self.settings_frame, width=15,
                state='readonly', textvariable=self.program_name)
@@ -109,20 +114,29 @@ class Keyboard(tk.Frame):
                self.program.current(0)
           else:
                self.program.current(0)
-          self.program.grid(column=3, row=15)
-        
-          beats = ["4/4", "6/8", "2/4", "3/4"]
-          self.metronome = Metronome(self.settings_frame, beats)
+          self.program.grid(column=3, row=10, padx=5, pady=5)
+          self.program.bind('<<ComboboxSelected>>', self.set_instrument)
 
-     def keyboard_playnote(self, event, prog, sustain=0, channel=0, velocity=127):
+     def keyboard_playnote(self, event):
           note = db.keyboard_mappings[event.keysym]
-          if note < 42:
-               musicpy.play_white_note(note, prog, sustain, channel, velocity)
-               self.buttons_white[note].config(bg='orange')
-               self.mainwindow.after(100,
-                    lambda: self.buttons_white[note].config(bg='white'))
-          elif note > 42:
-               musicpy.play_black_note(note-28, prog, sustain, channel, velocity)
-               self.buttons_black[note-28].config(bg='orange')
-               self.mainwindow.after(100,
-                    lambda: self.buttons_black[note-28].config(bg='black'))
+          self.musickeyboard.play_note(note, self.channel_no.get(),
+               self.__velocity.get())
+          self.buttons[note].config(bg='orange')
+          if note > 51:
+               self.root.after(100,
+                    lambda: self.buttons[note].config(bg='black'))
+          else:
+               self.root.after(100,
+                    lambda: self.buttons[note].config(bg='white'))
+
+     def mouse_playnote(self, event):
+          note = self.buttons.index(event.widget)
+          self.musickeyboard.play_note(note, self.channel_no.get(),
+               self.__velocity.get())
+
+     def sustain_change(self):
+          self.musickeyboard.sustain(self.channel_no.get(), self.__sustain.get())
+
+     def set_instrument(self, event):
+          instr_no, instr_name = self.program_name.get().split('  ')
+          self.musickeyboard.set_instrument(self.channel_no.get(), int(instr_no))
