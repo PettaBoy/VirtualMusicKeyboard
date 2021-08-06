@@ -5,6 +5,7 @@ UI for the keyboard.
 
 """
 
+import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
@@ -27,11 +28,17 @@ class App:
           icon = tk.PhotoImage(file="./piano.png")
           self.root.iconphoto(True, icon)
 
-          SF2 = "./GeneralUser GS 1.471/GeneralUser GS v1.471.sf2"
-          self.musickeyboard = MusicKeyboard(SF2)
-          self.musickeyboard.set_instrument(0, 0)
+          SF2 = [file for file in os.listdir("./sf2") if file.endswith('.sf2')]
+          if SF2 == []:
+               tk.messagebox.showerror(title='SF2 not found', message=
+                    'Cannot find SF2 file, please check again')
+               self.root.destroy()
+          else:
+               print(SF2[0])
+               self.musickeyboard = MusicKeyboard(os.path.join("./sf2", SF2[0]))
+               self.musickeyboard.set_instrument(0, 0)
           
-          self.initui()
+               self.initui()
 
      def initui(self):
           self.keyboard_frame = tk.Frame(self.root)
