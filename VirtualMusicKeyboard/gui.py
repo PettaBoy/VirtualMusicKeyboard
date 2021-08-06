@@ -34,7 +34,6 @@ class App:
                     'Cannot find SF2 file, please check again')
                self.root.destroy()
           else:
-               print(SF2[0])
                self.musickeyboard = MusicKeyboard(os.path.join("./sf2", SF2[0]))
                self.musickeyboard.set_instrument(0, 0)
           
