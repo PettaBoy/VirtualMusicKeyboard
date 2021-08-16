@@ -123,6 +123,9 @@ class App:
           self.program.grid(column=3, row=10, padx=5, pady=5)
           self.program.bind('<<ComboboxSelected>>', self.set_instrument)
 
+          beats = ["4/4", "6/8", "2/4", "3/4"]
+          self.metronome = Metronome(self.settings_frame, beats)
+
      def keyboard_playnote(self, event):
           note = db.keyboard_mappings[event.keysym]
           self.musickeyboard.play_note(note, self.channel_no.get(),
