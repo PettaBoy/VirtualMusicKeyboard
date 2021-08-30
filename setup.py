@@ -1,14 +1,7 @@
 import sys
 from cx_Freeze import setup, Executable
 
-build_exe_options = {"packages": ["VirtualMusicKeyboard"],
-                     "include_files": ["VirtualMusicKeyboard/sf2",
-                                  "VirtualMusicKeyboard/piano.png"],
-                     "excludes": ["asyncio", "bz2", "certifi", "concurrent",
-                                  "curses", "decimal", "email", "html", "http",
-                                  "json", "logging", "lzma", "multiprocessing",
-                                  "numpy", "scipy", "sqlite3", "sympy", "test",
-                                  "unittest", "urllib", "xml", "xmlrpc"]}
+build_exe_options = {"packages": ["srccode"]}
 
 base = None
 if sys.platform == "win32":
@@ -19,7 +12,7 @@ setup(
     version = "0.1",
     description = "A music keyboard experience, on your computer.",
     options = {"build_exe": build_exe_options},
-    executables = [Executable("./VirtualMusicKeyboard/__init__.py",
+    executables = [Executable("./srccode/__init__.py",
                               icon="piano.ico",
                               target_name="VirtualMusicKeyboard.exe", base=base)]
 )
