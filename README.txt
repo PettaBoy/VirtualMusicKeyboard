@@ -1,9 +1,9 @@
 __Virtual Music Keyboard__
 --------------------------
 Author: Sishir Sivakumar
-Works on: Windows
-Date Created: 12/03/21
-Current Version: 0.1
+Works on: Windows 8 or later
+Release date: 02/09/2021
+Current Version: 1.0
 
 Are you a music lover? Do you really want to play a music keyboard but cannot afford one?
 If your answers are yes, then you'll surely like this software!
@@ -11,12 +11,6 @@ Virtual Music Keyboard, as its name suggests, emulates a real-life music keyboar
 keyboard either with your mouse or your computer keyboard(CompK).
 (If you are wondering what a music keyboard is, it is just like a piano, but with added abilities like changing programs
 (instruments in music language) and a metronome(what people familiar with music might call a tempo or beats per minute(bpm)).)
-
-Installation
-------------
-
-Just extract the contents of the Virtual Music Keyboard folder into a convenient place, preferably in the Program Files folder in
-the C: drive. Now you are ready to play!
 
 Usage
 -----
@@ -95,8 +89,11 @@ Contributions and Contact
 The Virtual Music Keyboard is not finished yet, and will keep being updated from time to time. While improvements are being done
 almost every day, it is encouraged that users(especially developers) submit their code to this application.
 You can view the code for this application and submit your improvements at GitHub: https://github.com/PettaBoy/pettaboystudio
-
+You can also send me e-mails at mmrssishir0306@gmail.com.
 Thank you for using this application, and hope you enjoy it!
+
+Credits
+-------
 
 This application uses the mingus package, written by Bart Spaans(https://github.com/bspaans/python-mingus). Thank you so much, sir!
 Also, this application uses the soundfont GeneralUser GS 1.471, written by Christian Collins(http://schristiancollins.com). Again,
