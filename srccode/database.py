@@ -1,3 +1,26 @@
+# -*- coding: utf-8 -*-
+
+# VirtualMusicKeyboard - A music keyboard experience, on your computer.
+# Copyright (C) 2021, Sishir Sivakumar
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+"""
+    Important definitions and mappings for the app.
+
+"""
+
 white_note_names = {0: 'C', 1: 'D', 2: 'E', 3: 'F', 4: 'G', 5: 'A', 6: 'B'}
 black_note_names = {0: 'C#', 1: 'D#', 2: 'F#', 3: 'G#', 4: 'A#'}
 octave_nos = [0, 1, 2, 3, 4, 5, 6, 7, 8]
