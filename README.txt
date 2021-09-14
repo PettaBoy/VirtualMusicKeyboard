@@ -3,7 +3,8 @@ __Virtual Music Keyboard__
 Author: Sishir Sivakumar
 Works on: Windows 8 or later
 Release date: 03/09/2021
-Current Version: 1.0
+Current Version: 1.0.1
+Copyright (C) 2021 Sishir Sivakumar
 
 Are you a music lover? Do you really want to play a music keyboard but cannot afford one?
 If your answers are yes, then you'll surely like this software!
