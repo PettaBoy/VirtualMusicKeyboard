@@ -47,36 +47,36 @@ class Metronome:
     def interface(self):
         """Set interface for Metronome app."""
         label_metronome = ttk.Label(self.frame, text="Metronome")
-        label_metronome.grid(column=7, row=10, rowspan=10)
+        label_metronome.grid(column=6, row=0, rowspan=30, padx=5, pady=5)
         
         spinbox_bpm = ttk.Spinbox(self.frame, width=5, from_=60, to=300,
                                   state='readonly')
-        spinbox_bpm.grid(row=0, column=9)
+        spinbox_bpm.grid(row=0, column=8, padx=5, pady=5)
         spinbox_bpm.set(60)
 
         spinbox_beats = ttk.Spinbox(self.frame, width=5, values=self.beats,
                                 wrap=True, state='readonly')
-        spinbox_beats.grid(row=0, column=10)
+        spinbox_beats.grid(row=0, column=9, padx=5, pady=5)
         spinbox_beats.set(self.beats[0])
 
         label_bpm = ttk.Label(self.frame, text="BPM:")
-        label_bpm.grid(row=0, column=8)
+        label_bpm.grid(row=0, column=7, padx=5, pady=5)
 
         label_time = ttk.Label(self.frame, text="Time:")
-        label_time.grid(row=10, column=8)
+        label_time.grid(row=10, column=7, padx=5, pady=5)
 
         label_count = ttk.Label(self.frame, textvariable=self.var,
                                 font=("Arial", 10))
-        label_count.grid(row=10, column=9, columnspan=2)
+        label_count.grid(row=10, column=8, columnspan=2, padx=5, pady=5)
 
         button_start = ttk.Button(self.frame, text="Start", width=10,
                               command=lambda: self.start_counter(spinbox_bpm,
                                                                  spinbox_beats))
-        button_start.grid(row=20, column=9)
+        button_start.grid(row=20, column=8, padx=5, pady=5)
 
         button_stop = ttk.Button(self.frame, text="Stop", width=10,
                              command=lambda: self.stop_counter())
-        button_stop.grid(row=20, column=10)
+        button_stop.grid(row=20, column=9, padx=5, pady=5)
 
     def start_counter(self, spinbox1, spinbox2):
         """Start counter if self.start is False(prevents multiple starts)."""

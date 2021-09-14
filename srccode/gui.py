@@ -25,6 +25,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+from PIL import Image, ImageTk
 
 from musicpy import MusicKeyboard
 import database as db
@@ -40,9 +41,10 @@ class App:
           self.white_keys = 2 + 7*scales + 1
           self.black_keys = [1, 0] + [1, 1, 0, 1, 1, 1, 0]*scales
           self.root.title("VirtualMusicKeyboard")
-          self.root.geometry('%dx300'%(40+140*scales+20))
-          icon = tk.PhotoImage(file="./piano.png")
-          self.root.iconphoto(True, icon)
+          self.root.geometry('%dx350'%(40+140*scales+20))
+          self.piano_img = Image.open("piano.png")
+          self.icon = ImageTk.PhotoImage(self.piano_img)
+          self.root.iconphoto(True, self.icon)
 
           SF2 = [file for file in os.listdir("./sf2") if file.endswith('.sf2')]
           if SF2 == []:
@@ -139,8 +141,22 @@ class App:
           self.program.grid(column=3, row=10, padx=5, pady=5)
           self.program.bind('<<ComboboxSelected>>', self.set_instrument)
 
+          self.display = tk.Text(self.settings_frame, width=60, height=5)
+          self.display.grid(column=4, row=0, columnspan=2, rowspan=30,
+               padx=5, pady=5)
+
+          self.button_about = ttk.Button(self.settings_frame, text="About",
+               width=10, command=self.about_box_open)
+          self.button_about.grid(column=4, row=30, padx=5, pady=5)
+          self.button_help = ttk.Button(self.settings_frame, text="Help",
+               width=10, command=self.help_open)
+          self.button_help.grid(column=5, row=30, padx=5, pady=5)
+
           beats = ["4/4", "6/8", "2/4", "3/4"]
           self.metronome = Metronome(self.settings_frame, beats)
+
+          self.settings_frame.columnconfigure(4, weight=2)
+          self.settings_frame.columnconfigure(5, weight=2)
 
      def keyboard_playnote(self, event):
           note = db.keyboard_mappings[event.keysym]
@@ -165,3 +181,28 @@ class App:
      def set_instrument(self, event):
           instr_no, instr_name = self.program_name.get().split('  ')
           self.musickeyboard.set_instrument(self.channel_no.get(), int(instr_no))
+
+     def about_box_open(self):
+          about_box = tk.Toplevel(self.root)
+          about_box.title("About")
+          label_icon = ttk.Label(about_box, image=self.icon, width=5)
+          label_icon.grid(column=0, row=0, padx=5, pady=5)
+          label_title = ttk.Label(about_box, text="VirtualMusicKeyboard",
+               font=("Arial", 20))
+          label_title.grid(column=1, row=0, padx=5, pady=5)
+          description = "A music keyboard experience, on your computer."
+          label_description = ttk.Label(about_box, text=description,
+               font=("Arial", 10))
+          label_description.grid(column=0, row=1, columnspan=2, padx=5, pady=5)
+          license_cum_copyright = ("This application is licensed under the GNU"
+               " General Public License." "\n" "See the license file for more" 
+               " information." "\n"
+               "Copyright (C) 2021, Sishir Sivakumar."
+               )
+          label_copyrightcumlicense = ttk.Label(about_box,
+               text=license_cum_copyright, font=("Arial", 10))
+          label_copyrightcumlicense.grid(column=0, row=2, columnspan=2, padx=5,
+               pady=5)
+          
+     def help_open(self):
+          os.system("start README.txt")
