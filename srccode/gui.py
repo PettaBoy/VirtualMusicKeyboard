@@ -46,13 +46,13 @@ class App:
           self.icon = ImageTk.PhotoImage(self.piano_img)
           self.root.iconphoto(True, self.icon)
 
-          SF2 = [file for file in os.listdir("./sf2") if file.endswith('.sf2')]
-          if SF2 == []:
+          self.SF2 = [file for file in os.listdir("./sf2") if file.endswith('.sf2')]
+          if self.SF2 == []:
                tk.messagebox.showerror(title='SF2 not found', message=
                     'Cannot find SF2 file, please check again')
                self.root.destroy()
           else:
-               self.musickeyboard = MusicKeyboard(os.path.join("./sf2", SF2[0]))
+               self.musickeyboard = MusicKeyboard(os.path.join("./sf2", self.SF2[0]))
                self.musickeyboard.set_instrument(0, 0)
           
                self.initui()
@@ -67,15 +67,18 @@ class App:
           self.create_keys()
           self.tuning_options()
 
-          self.root.bind('<Key>', self.keyboard_playnote)
+          self.keyDown = False
+          self.keyList = {}
+
+          self.root.bind('<KeyPress>', self.keyboard_playnote)
+          self.root.bind('<KeyRelease>', self.keyboard_stopnote)
           for button in self.buttons:
                self.root.bind('<Button-1>', self.mouse_playnote)
     
      def create_keys(self):
           """Creates the white and black keys of the keyboard."""
           for i in range(self.white_keys):
-               self.W = tk.Button(self.keyboard_frame, bg='white',
-                    command=lambda i=i: print(i))
+               self.W = tk.Button(self.keyboard_frame, bg='white')
                self.W.grid(row=0, column=i*3, rowspan=2, columnspan=3,
                     sticky='nsew')
                self.buttons.append(self.W)
@@ -83,7 +86,7 @@ class App:
           for i in range(self.white_keys-1):
                if self.black_keys[i] == 1:
                     self.B = tk.Button(self.keyboard_frame, bg='black',
-                         activebackground='grey', command=lambda i=i: print(i))
+                         activebackground='grey')
                     self.B.grid(row=0, column=(i*3)+2, rowspan=1, columnspan=2,
                          sticky='nsew')
                     self.buttons.append(self.B)
@@ -152,28 +155,38 @@ class App:
                width=10, command=self.help_open)
           self.button_help.grid(column=5, row=30, padx=5, pady=5)
 
-          beats = ["4/4", "6/8", "2/4", "3/4"]
-          self.metronome = Metronome(self.settings_frame, beats)
+          beats = ["4/4", "8/8", "6/8", "2/4", "3/4", "5/4"]
+          self.metronome = Metronome(self.settings_frame, beats, self.SF2)
 
           self.settings_frame.columnconfigure(4, weight=2)
           self.settings_frame.columnconfigure(5, weight=2)
-
-     def keyboard_playnote(self, event):
-          note = db.keyboard_mappings[event.keysym]
-          self.musickeyboard.play_note(note, self.channel_no.get(),
-               self.__velocity.get())
-          self.buttons[note].config(bg='orange')
-          if note > 51:
-               self.root.after(100,
-                    lambda: self.buttons[note].config(bg='black'))
-          else:
-               self.root.after(100,
-                    lambda: self.buttons[note].config(bg='white'))
 
      def mouse_playnote(self, event):
           note = self.buttons.index(event.widget)
           self.musickeyboard.play_note(note, self.channel_no.get(),
                self.__velocity.get())
+
+     def keyboard_playnote(self, event):
+         if (event.keysym in self.keyList) != True:
+              self.keyList[event.keysym] = "down"
+              for k in self.keyList:
+                   note = db.keyboard_mappings[k]
+                   self.musickeyboard.play_note(note, self.channel_no.get(),
+                        self.__velocity.get())
+                   self.buttons[note].config(bg='orange')
+                   if note > 51:
+                        self.root.after(100,
+                             lambda: self.buttons[note].config(bg='black'))
+                   else:
+                        self.root.after(100,
+                             lambda: self.buttons[note].config(bg='white'))
+         self.keyDown = True
+
+     def keyboard_stopnote(self, event):
+         if (event.keysym in self.keyList) == True:
+              self.keyList.pop(event.keysym)
+         if len(self.keyList) == 0:
+              self.keyDown = False
 
      def sustain_change(self):
           self.musickeyboard.sustain(self.channel_no.get(), self.__sustain.get())
