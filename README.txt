@@ -3,7 +3,7 @@ __Virtual Music Keyboard__
 Author: Sishir Sivakumar
 Works on: Windows 8 or later
 Release date: 03/09/2021
-Current Version: 1.0.1
+Current Version: 1.1.0
 Copyright (C) 2021 Sishir Sivakumar
 
 Are you a music lover? Do you really want to play a music keyboard but cannot afford one?
@@ -75,14 +75,13 @@ pretty much ignore it.) Keep in mind that this keyboard uses the fluidsynth plug
 General MIDI specifications. Thus, channel 9 is used for playing percussion instruments.
 
 This keyboard also comes with a metronome inside it. Just press start to activate it, and stop to deactivate. This metronome uses
-beeps to indicate tempo. You can change the bpm and time signature of the metronome.
+beeps by default to indicate tempo, but you can change the mode to percussion as well. You can change the bpm and time signature
+of the metronome.
 This metronome is only a minimal one. There are plans to expand the metronome features in the future.
 
 Known Issues
 ------------
 
-Whenever a key is pressed to play a corresponding note in the keyboard, the key will play multiple times. This is a feature of the
-GUI code used for this program, and a workaround has not been found for this yet, unfortunately.
 
 Contributions and Contact
 -------------------------
