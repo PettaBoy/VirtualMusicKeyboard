@@ -18,6 +18,7 @@
 
 """
     Metronome Section of the Keyboard.
+    Taken from https://github.com/Kwisses/Metronome
 
 """
 
